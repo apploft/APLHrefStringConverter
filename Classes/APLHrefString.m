@@ -55,7 +55,7 @@
          */
         
         NSRange captureGroup1 = [result rangeAtIndex:1];
-        NSString *substringCaptureGroup1 = [self.stringWithHref substringWithRange:captureGroup1];
+//        NSString *substringCaptureGroup1 = [self.stringWithHref substringWithRange:captureGroup1];
         
         captureGroup1.location -= correction;
         [markupFreeString deleteCharactersInRange:captureGroup1];
@@ -63,10 +63,10 @@
         correction += captureGroup1.length;
         
         NSRange captureGroup2 = [result rangeAtIndex:2];
-        NSString *substringCaptureGroup2 = [self.stringWithHref substringWithRange:captureGroup2];
+//        NSString *substringCaptureGroup2 = [self.stringWithHref substringWithRange:captureGroup2];
         
         NSRange captureGroup3 = [result rangeAtIndex:3];
-        NSString *substringCaptureGroup3 = [self.stringWithHref substringWithRange:captureGroup3];
+//        NSString *substringCaptureGroup3 = [self.stringWithHref substringWithRange:captureGroup3];
         
         captureGroup3.location -= correction;
         [markupFreeString deleteCharactersInRange:captureGroup3];
