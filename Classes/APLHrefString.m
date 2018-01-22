@@ -90,7 +90,7 @@
         // Decorate the touchable substrings
         [self.urlRanges enumerateObjectsUsingBlock:^(APLUrlRange *urlRange, NSUInteger index, BOOL *stop) {
             NSRange range = [urlRange range];
-            [_attributedString addAttributes:self.linkStyle range:range];
+            [_attributedString addAttribute:NSLinkAttributeName value:urlRange.url range:range];
         }];
         
     }
