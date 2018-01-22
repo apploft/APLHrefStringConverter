@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.summary      = "A simple extension of String taking a string containing hrefs and creating clickable MutableStrings"
 
   s.description  = <<-DESC
-                   A simple String extension that creates clickable links out of hrefs contained in the String.
+                   A simple String extension that creates clickable links out of hrefs contained in the String. The result is a mutableString that contains the text and the clickable hrefs at the right positions.
                    DESC
 
   s.homepage     = "https://github.com/apploft/APLUrlTextView"
