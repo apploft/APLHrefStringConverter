@@ -5,27 +5,27 @@
 //  Copyright (c) 2015 apploft GmbH. All rights reserved.
 //
 
-#import "APLHrefString.h"
+#import "APLHrefStringConverter.h"
 
 @implementation APLUrlRange
 @end
 
 
-@interface APLHrefString()
+@interface APLHrefStringConverter()
 
 +(NSMutableAttributedString*)attributedString:(NSString *)hrefString;
 
 @end
 
 
-@implementation APLHrefString
+@implementation APLHrefStringConverter
 
 
 +(NSString*)stringWithoutMarkup:(NSString *)stringWithHref {
     NSMutableString *markupFreeString = [stringWithHref mutableCopy];
     __block NSUInteger correction = 0;
     
-    NSRegularExpression *regEx = [APLHrefString regEx];
+    NSRegularExpression *regEx = [APLHrefStringConverter regEx];
     
     [regEx enumerateMatchesInString:stringWithHref options:0 range:NSMakeRange(0, [stringWithHref length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
         /* We are iterating the string from left to right. As we are deleting characters in the
@@ -56,10 +56,10 @@
 
 +(NSMutableAttributedString*)convert:(NSString *)hrefString {
     NSMutableAttributedString *mutableStringWithHref;
-    NSArray *urlRanges = [APLHrefString urlRanges:hrefString];
+    NSArray *urlRanges = [APLHrefStringConverter urlRanges:hrefString];
     
     
-    NSString *markupFreeString = [APLHrefString stringWithoutMarkup:hrefString];
+    NSString *markupFreeString = [APLHrefStringConverter stringWithoutMarkup:hrefString];
     
     if (markupFreeString != nil) {
         mutableStringWithHref = [[NSMutableAttributedString alloc] initWithString:markupFreeString];
@@ -100,7 +100,7 @@
         
         __block NSUInteger correction = 0;
         
-        NSRegularExpression *regEx = [APLHrefString regEx];
+        NSRegularExpression *regEx = [APLHrefStringConverter regEx];
         
         [regEx enumerateMatchesInString:stringWithHref options:0 range:NSMakeRange(0, [stringWithHref length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
             APLUrlRange *touchableArea = [[APLUrlRange alloc] init];
@@ -151,4 +151,5 @@
 }
 
 @end
+
 
