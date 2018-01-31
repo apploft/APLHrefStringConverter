@@ -14,8 +14,6 @@
 @property (nonatomic) NSRange range;
 @property (nonatomic) NSURL *url;
 @end
-
-/*
  
  /*
  A class accepting strings with embedded 'href' links.

@@ -13,7 +13,7 @@
 
 @interface APLHrefStringConverter()
 
-+(NSMutableAttributedString*)attributedString:(NSString *)hrefString;
++(NSMutableAttributedString*)convert:(NSString *)hrefString;
 
 @end
 
@@ -40,8 +40,6 @@
         [markupFreeString deleteCharactersInRange:captureGroup1];
         
         correction += captureGroup1.length;
-        
-        NSRange captureGroup2 = [result rangeAtIndex:2];
         
         NSRange captureGroup3 = [result rangeAtIndex:3];
         
