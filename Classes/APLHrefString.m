@@ -1,7 +1,7 @@
 //
 //  APLHrefString.m
 //
-//  Created by Tino Rachui on 24.04.2015
+//  Created by Tino Rachui on 24.04.2015, extended by Famara Kassama on 20.01.2018
 //  Copyright (c) 2015 apploft GmbH. All rights reserved.
 //
 
@@ -12,42 +12,22 @@
 
 
 @interface APLHrefString()
-@property (nonatomic, strong, readwrite) NSMutableAttributedString *attributedString;
-@property (nonatomic, strong, readwrite) NSArray *urlRanges;
-@property (nonatomic, strong) NSRegularExpression *regEx;
 
--(NSString*)stringWithoutMarkup;
++(NSMutableAttributedString*)attributedString:(NSString *)hrefString;
+
 @end
 
 
 @implementation APLHrefString
 
--(id)init {
-    self = [super init];
-    
-    if (self != nil) {
-        // Set the default link style
-        self.linkStyle = @{
-                           NSForegroundColorAttributeName : [UIColor blueColor],
-                           NSUnderlineStyleAttributeName : [NSNumber  numberWithInt:NSUnderlineStyleSingle]
-                           };
-    }
-    return self;
-}
 
--(void)setStringWithHref:(NSString *)string {
-    _stringWithHref = string;
-    
-    // force attributedString and touchableAreas to be recreted by setting them to nil
-    self.attributedString = nil;
-    self.urlRanges = nil;
-}
-
--(NSString*)stringWithoutMarkup {
-    NSMutableString *markupFreeString = [self.stringWithHref mutableCopy];
++(NSString*)stringWithoutMarkup:(NSString *)stringWithHref {
+    NSMutableString *markupFreeString = [stringWithHref mutableCopy];
     __block NSUInteger correction = 0;
     
-    [self.regEx enumerateMatchesInString:self.stringWithHref options:0 range:NSMakeRange(0, [self.stringWithHref length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+    NSRegularExpression *regEx = [APLHrefString regEx];
+    
+    [regEx enumerateMatchesInString:stringWithHref options:0 range:NSMakeRange(0, [stringWithHref length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
         /* We are iterating the string from left to right. As we are deleting characters in the
          string we need to correct the location of the capture range accordingly. So we substract
          the current correction and after replacement of a substring add the length of the replaced
@@ -55,7 +35,6 @@
          */
         
         NSRange captureGroup1 = [result rangeAtIndex:1];
-//        NSString *substringCaptureGroup1 = [self.stringWithHref substringWithRange:captureGroup1];
         
         captureGroup1.location -= correction;
         [markupFreeString deleteCharactersInRange:captureGroup1];
@@ -63,10 +42,8 @@
         correction += captureGroup1.length;
         
         NSRange captureGroup2 = [result rangeAtIndex:2];
-//        NSString *substringCaptureGroup2 = [self.stringWithHref substringWithRange:captureGroup2];
         
         NSRange captureGroup3 = [result rangeAtIndex:3];
-//        NSString *substringCaptureGroup3 = [self.stringWithHref substringWithRange:captureGroup3];
         
         captureGroup3.location -= correction;
         [markupFreeString deleteCharactersInRange:captureGroup3];
@@ -77,27 +54,30 @@
     return markupFreeString;
 }
 
--(NSMutableAttributedString*)attributedString {
-    if (_attributedString == nil) {
-        NSString *markupFreeString = [self stringWithoutMarkup];
-        
-        if (markupFreeString != nil) {
-            _attributedString = [[NSMutableAttributedString alloc] initWithString:markupFreeString];
-        } else {
-            _attributedString = [[NSMutableAttributedString alloc] init];
-        }
-        
-        // Decorate the touchable substrings
-        [self.urlRanges enumerateObjectsUsingBlock:^(APLUrlRange *urlRange, NSUInteger index, BOOL *stop) {
-            NSRange range = [urlRange range];
-            [_attributedString addAttribute:NSLinkAttributeName value:urlRange.url range:range];
-        }];
-        
++(NSMutableAttributedString*)convert:(NSString *)hrefString {
+    NSMutableAttributedString *mutableStringWithHref;
+    NSArray *urlRanges = [APLHrefString urlRanges:hrefString];
+    
+    
+    NSString *markupFreeString = [APLHrefString stringWithoutMarkup:hrefString];
+    
+    if (markupFreeString != nil) {
+        mutableStringWithHref = [[NSMutableAttributedString alloc] initWithString:markupFreeString];
+    } else {
+        mutableStringWithHref = [[NSMutableAttributedString alloc] init];
     }
-    return _attributedString;
+    
+    // Decorate the touchable substrings
+    [urlRanges enumerateObjectsUsingBlock:^(APLUrlRange *urlRange, NSUInteger index, BOOL *stop) {
+        NSRange range = [urlRange range];
+        [mutableStringWithHref addAttribute:NSLinkAttributeName value:urlRange.url range:range];
+    }];
+    
+    
+    return mutableStringWithHref;
 }
 
--(NSString*)extractLinkTargetFromHref:(NSString*)href {
++(NSString*)extractLinkTargetFromHref:(NSString*)href {
     static NSString *kStartPattern = @"<a href=\"";
     static NSString *kEndPattern = @"\"";
     
@@ -112,17 +92,21 @@
     return url;
 }
 
--(NSArray*)urlRanges {
-    if (_urlRanges == nil) {
++(NSArray*)urlRanges:(NSString*)stringWithHref {
+    NSArray *urlRanges = nil;
+    
+    if (urlRanges == nil) {
         NSMutableArray *tempArray = [NSMutableArray array];
         
         __block NSUInteger correction = 0;
         
-        [self.regEx enumerateMatchesInString:self.stringWithHref options:0 range:NSMakeRange(0, [self.stringWithHref length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+        NSRegularExpression *regEx = [APLHrefString regEx];
+        
+        [regEx enumerateMatchesInString:stringWithHref options:0 range:NSMakeRange(0, [stringWithHref length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
             APLUrlRange *touchableArea = [[APLUrlRange alloc] init];
             
             NSRange captureGroup1 = [result rangeAtIndex:1];
-            NSString *substringCaptureGroup1 = [self.stringWithHref substringWithRange:captureGroup1];
+            NSString *substringCaptureGroup1 = [stringWithHref substringWithRange:captureGroup1];
             NSString *url = [self extractLinkTargetFromHref:substringCaptureGroup1];
             
             correction += captureGroup1.length;
@@ -140,13 +124,13 @@
             [tempArray addObject:touchableArea];
         }];
         
-        _urlRanges = tempArray;
+        urlRanges = tempArray;
     }
     
-    return _urlRanges;
+    return urlRanges;
 }
 
--(NSRegularExpression*)regEx {
++(NSRegularExpression*)regEx {
     /* Matches strings like "I have read <href="http://trendu.com">Link Text</href> blah blah"
      The first capture group contains the '<href="...">
      the second capture group contains the 'Link Text'
@@ -154,16 +138,17 @@
      A capture group is enclosed in '()' in the regex expression.
      */
     static NSString *kRegExPattern = @"(<a href=[^>]*>)([^<]*)(</a>)";
+    NSRegularExpression *regEx = nil;
     
-    if (_regEx == nil) {
-        NSError *error = nil;
-        _regEx = [NSRegularExpression regularExpressionWithPattern:kRegExPattern options:NSRegularExpressionCaseInsensitive error:&error];
-        
-        if (error != nil) {
-            NSLog(@"Error parsing string %@", self.stringWithHref);
-        }
+    NSError *error = nil;
+    regEx = [NSRegularExpression regularExpressionWithPattern:kRegExPattern options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    if (error != nil) {
+        NSLog(@"Error parsing string");
     }
-    return _regEx;
+    
+    return regEx;
 }
 
 @end
+
