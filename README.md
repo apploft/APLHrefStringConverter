@@ -1,26 +1,29 @@
-APLUrlTextView
+APLHrefStringConverter
 =========
-A simple UITextView extensions allowing to add URLs and getting informed when the user selects one of these URLs. You can use the 'linkTextAttributtes' of UITextView in order to define the styling of the links being embeded.
+A simple converter class which takes a string containing 'hrefs' as input and returns an attributed String with links at corresponding places.
 
 ## Installation
 Install via cocoapods by adding this to your Podfile:
 
-	pod 'APLUrlTextView', '0.0.2'
+	pod 'APLHrefStringConverter', '0.0.4'
 
 ## Usage
 Import header file:
 
-	#import "APLUrlTextView.h"
-	#import "APLHrefString.h"
+	#import "APLHrefStringConverter.h"
 	
-Use APLUrlTextView like this:
+Use APLHrefStringConverter like this:
 	
-	...
+	...APLHrefStringConverter
 	self.textView.delegate = self;
 	...
-	NSURL *targetURL = [NSURL URLWithString:"..."];
-	NSRange linkRange = NSMakeRange(...);
-	[self.textView addLinkToURL:targetURL withRange:linkRange];
+	
+	NSString *testString = @"A string with <a href=\"http://www.apploft.de\">a link</href>";
+   	NSMutableAttributedString *mutableStringWithHref = [APLHrefStringConverter convert:testString];
+   
+	self.textView.attributedString = mutableStringWithHref;
+	self.textView.dataDetectorTypes = UIDataDetectorTypeLink;
+
 	...
 	
 	// Implement the delegate method extending the UITextViewDelegate method
@@ -28,7 +31,4 @@ Use APLUrlTextView like this:
 	-(void)textView:(APLUrlTextView *)label didSelectLinkWithURL:(NSURL *)url {
 	  ...
     }
-    
-	Use APLHrefString to parse strings containing 'hrefs' like this "A string with 
-	<href="http://www.apploft.de">a link</href>" and get a corresponding attributed string plus rnages and urls to be used for the APLUrlTextView.
     		
