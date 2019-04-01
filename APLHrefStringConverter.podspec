@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "APLHrefStringConverter"
-  s.version      = "1.0.3"
+  s.version      = "1.0.4"
   s.summary      = "A simple extension of String taking a string containing hrefs and creating clickable MutableStrings"
 
   s.description  = <<-DESC
