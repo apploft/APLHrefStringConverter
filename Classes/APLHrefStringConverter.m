@@ -129,8 +129,8 @@
 }
 
 +(NSRegularExpression*)regEx {
-    /* Matches strings like "I have read <href="http://trendu.com">Link Text</href> blah blah"
-     The first capture group contains the '<href="...">
+    /* Matches strings like "I have read "<a href=\"https://www.apploft.de\">Apploft</a>" blah blah"
+     The first capture group contains the '<a href="...">
      the second capture group contains the 'Link Text'
      the third capture group
      A capture group is enclosed in '()' in the regex expression.
