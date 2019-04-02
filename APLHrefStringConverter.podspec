@@ -11,7 +11,8 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/apploft/APLUrlTextView"
 
   s.license      = { :type => "MIT", :file => "LICENSE" }
-
+  s.swift_versions = ['4.2', '5.0']
+  
   s.author             = { "Famara Kassama" => "famara.kassama@gmail.com" }
   
   s.platform     = :ios, "10.0"
