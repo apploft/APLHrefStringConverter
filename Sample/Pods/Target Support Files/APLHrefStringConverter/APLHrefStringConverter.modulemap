@@ -1,0 +1,6 @@
+framework module APLHrefStringConverter {
+  umbrella header "APLHrefStringConverter-umbrella.h"
+
+  export *
+  module * { export * }
+}

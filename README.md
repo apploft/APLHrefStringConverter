@@ -23,34 +23,72 @@ import APLHrefStringConverter
     let testString = "A string with <a href=\"http://www.apploft.de\">a link</a>"
     
     let linkTextAttributes: [NSAttributedString.Key: Any] = [
-    NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue,
-    NSAttributedString.Key.foregroundColor: UIColor.white,
-    NSAttributedString.Key.underlineColor: UIColor.white,
-    NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)]
+        NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue,
+        NSAttributedString.Key.foregroundColor: UIColor.white,
+        NSAttributedString.Key.underlineColor: UIColor.white,
+        NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)
+    ]
 
-    let attributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.foregroundColor: UIColor.brown]
+    let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.foregroundColor: UIColor.brown]
 
-    let stringWithLink = HTMLStringConverter.convert(testString, linkAttributes: linkTextAttributes, stringAttributes: attributes)
+    let htmlFormattedString = HTMLStringConverter.convert(testString, linkAttributes: linkTextAttributes, stringAttributes: textAttributes)
 
-#### Using HTMLStringConverter with UITextView
+#### Example using HTMLStringConverter with UITextView
 
 UITextView has a property to detect links automatically. Therefore UITextViews can be useful in combination with this pod. The textView's property isEditable needs to be set to false for this to work.
 Also, UITextView provides a property linkTextAttributes to style the links in its attributedString. This will override the converted link styles. So when using UITextViews, either use this property to style the links or set the link attributes to [:]:
 
-    textView.attributedText = stringWithLink
+    textView.attributedText = htmlFormattedString
     textView.linkTextAttributes = [:]
     textView.delegate = self
     textview.dataDetectorTypes
     textView.isEditable = false
 
-#### Using HTMLStringConverter with UILabel
-UILabel cannot automatically detect links, but can still be used to display html tagged formatted text with this converter.
+#### Example using HTMLStringConverter with UILabel
+UILabel cannot automatically detect links, but can still be used to display html tagged formatted text with this converter. 
+Warning: Despite UILabel not being able to detect links automatically, links can still be displayed and formatted through linkAttributes when using the HTMLStringConverter. This can lead to a false UI when using UILabel instead of UITextView. (Example in Sample project)
 
-    label.attributedText = stringWithLink
+    label.attributedText = htmlFormattedString
 
-### Example using an HTML-Wrapper
+### Example using HTMLStringConverter with an HTML-Wrapper
+HTML-Custom-Wrapper.html:
     
+    <!DOCTYPE html>
+    <html>
+        <head>
+        <style>
+            body {
+                font-family: 'Droid Sans';
+                font-style: normal;
+                font-weight: 400;
+                margin: 50px;
+                }
+            h1 {
+                font-size: 35px;
+                font-weight: normal;
+                margin-top: 5px;
+                text-align: center;
+                }
+            li {
+                background-color: #3aa5c0;
+                }
+        </style>
+        </head>
+        <body>
+            <div class="Text">
+                $text-content$
+                </div>
+        </body>
+    </html>
 
+#### Usage
+
+    let htmlWrapperLabel = UILabel()
+    let string = "<h1>Ihr Partner für Erfolg in der App Welt!</h1><br><li>apploft</li>ist eine Tech Agentur der mobilen Welt, die 2008 als Ausgründung aus Apple gestartet ist. Heute begleiten wir viele Kunden auf dem Weg zum Erfolg. Unsere Kernbereiche sind dabei iOS, Android, tvOS, Android TV, AR, VR, Bots und Skills und unser Leistungsportfolio erstreckt sich von Strategieberatung, Design Thinking, Agile Coaching, UX, UI-Design, über die Software-Entwicklung bis hin zum Aufbau und Betrieb Cloud basierter Backend-Services."
+
+    //loading the htmlWrapper file
+    let customHTMLWrapper = Bundle.main.url(forResource: "HTML-Custom-Wrapper", withExtension: ".html")
+    htmlWrapperLabel.attributedText = HTMLTextConverter.convert(string, htmlWrapperURL: customHTMLWrapper, encoding: .isoLatin1)
 
 APLHrefStringConverter(deprecated)
 =========

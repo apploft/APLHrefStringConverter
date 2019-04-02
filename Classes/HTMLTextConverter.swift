@@ -7,15 +7,16 @@
 
 import Foundation
 
-class HTMLTextConverter: NSObject {
+public class HTMLTextConverter: NSObject {
 
     static let textStylePlaceholder: String = "$text-style$"
     static let linkStylePlaceholder: String = "$link-style$"
     static let textPlaceholder: String = "$text-content$"
 
     private static let defaultWrapperFileName = "HTML-Wrapper"
+    private static let resourceBundleName = "APLHrefStringConverter.bundle"
 
-    class func convert(_ text: String, textAttributes: [NSAttributedString.Key: Any]? = nil, linkAttributes: [NSAttributedString.Key: Any]? = nil, htmlWrapperURL: URL? = nil, encoding: String.Encoding = .utf8) -> NSAttributedString? {
+    open class func convert(_ text: String, textAttributes: [NSAttributedString.Key: Any]? = nil, linkAttributes: [NSAttributedString.Key: Any]? = nil, htmlWrapperURL: URL? = nil, encoding: String.Encoding = .utf8) -> NSAttributedString? {
         guard let htmlWrapper = HTMLTextConverter.getHTMLWrapper(htmlWrapperURL) else { return nil }
 
         let htmlWrapperString = String(data: htmlWrapper, encoding: .utf8)
@@ -41,8 +42,14 @@ class HTMLTextConverter: NSObject {
     }
     
     class func getHTMLWrapper(_ htmlWrapperURL: URL? = nil) -> Data? {
-        guard let htmlWrapperURL = htmlWrapperURL ?? Bundle(for: HTMLTextConverter.self).url(forResource: defaultWrapperFileName, withExtension: "html"), let htmlWrapper = try? Data(contentsOf: htmlWrapperURL) else { return nil }
-        return htmlWrapper
+        if let htmlWrapperURL = htmlWrapperURL {
+            return try? Data(contentsOf: htmlWrapperURL)
+        } else {
+            if let bundleResourceURL = Bundle(for: HTMLTextConverter.self).resourceURL?.appendingPathComponent(resourceBundleName), let bundle = Bundle(url: bundleResourceURL), let htmlWrapperURL = bundle.url(forResource: defaultWrapperFileName, withExtension: "html") {
+                return try? Data(contentsOf: htmlWrapperURL)
+            }
+        }
+        return nil
     }
 }
 
@@ -69,7 +76,7 @@ struct CSSAttributedDictionary {
             switch attribute.key {
             case .foregroundColor:
                 guard let color: UIColor = attribute.value as? UIColor else { break }
-                attributeDict[.color] = "\(color.toHexString())"
+                attributeDict[.color] = "\(color.toHexColorString())"
             case .font:
                 guard let font = attribute.value as? UIFont else { break }
                 let isSystemFontFamily = font.familyName == UIFont.systemFont(ofSize: 12).familyName

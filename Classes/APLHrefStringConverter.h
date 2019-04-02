@@ -22,10 +22,10 @@
  being stripped. Furthermore the class provides an array of url range objects.
  They can for instance be used in order to initialize an APLURLTextView instance.
  */
-DEPRECATED_MSG_ATTRIBUTE("This class is deprecated, use HTMLStringConverter instead")
+
 @interface APLHrefStringConverter : NSObject
 
-+(NSMutableAttributedString*)convert:(NSString *)hrefString;
++(NSMutableAttributedString*)convert:(NSString *)hrefString __deprecated_msg("This class is deprecated, use HTMLStringConverter instead");
 
 @end
 

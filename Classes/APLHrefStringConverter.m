@@ -10,13 +10,11 @@
 @implementation APLUrlRange
 @end
 
-
 @interface APLHrefStringConverter()
 
 +(NSMutableAttributedString*)convert:(NSString *)hrefString;
 
 @end
-
 
 @implementation APLHrefStringConverter
 

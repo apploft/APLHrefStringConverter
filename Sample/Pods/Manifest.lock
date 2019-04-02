@@ -1,0 +1,16 @@
+PODS:
+  - APLHrefStringConverter (1.0.4)
+
+DEPENDENCIES:
+  - APLHrefStringConverter (from `..`)
+
+EXTERNAL SOURCES:
+  APLHrefStringConverter:
+    :path: ".."
+
+SPEC CHECKSUMS:
+  APLHrefStringConverter: ff48e76d485e6ccc9e8a90c8d9d9809e544ea57d
+
+PODFILE CHECKSUM: 9ff1038ab465f381214db1fb60c76487ee202519
+
+COCOAPODS: 1.6.1
