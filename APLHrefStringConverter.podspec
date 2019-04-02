@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   
   s.platform     = :ios, "10.0"
   
-  s.source       = { :git => "https://github.com/apploft/APLHrefStringConverter.git", :tag => "s.version.to_s" }
+  s.source       = { :git => "https://github.com/apploft/APLHrefStringConverter.git", :tag => s.version.to_s }
 
   s.source_files  = "Classes", "Classes/**/*"
   s.exclude_files = "Classes/Exclude"
