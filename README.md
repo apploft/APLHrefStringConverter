@@ -11,14 +11,13 @@ The converter uses "$text-content$" as placeholder in the HTML-Wrapper. This is 
 ## Installation
 Install via cocoapods by adding this to your Podfile:
 
-pod 'APLHrefStringConverter', '1.0.0'
+pod 'APLHrefStringConverter', '1.0.7'
 
 ## Usage
-import APLHrefStringConverter
+    import APLHrefStringConverter
 
 ### Use HTMLStringConverter like this:
 
-    import HTMLStringConverter
 
     let testString = "A string with <a href=\"http://www.apploft.de\">a link</a>"
     
