@@ -1,4 +1,4 @@
-HTMLStringConverter
+HTMLTextConverter
 =========
 A simple converter class that takes a string containing html element text, such as 'href' strings and tags <br>, and returns an attributed String with the converted elements. 
 I.e. a 'href' string will be converted to a string with the links at the corresponding places. The converter uses a html wrapper template and inserts the text inside the document. The converter accepts NSAttributes for each text and link styling. 
@@ -16,7 +16,7 @@ pod 'APLHrefStringConverter', '1.0.7'
 ## Usage
     import APLHrefStringConverter
 
-### Use HTMLStringConverter like this:
+### Use HTMLTextConverter like this:
 
 
     let testString = "A string with <a href=\"http://www.apploft.de\">a link</a>"
@@ -30,9 +30,9 @@ pod 'APLHrefStringConverter', '1.0.7'
 
     let textAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.foregroundColor: UIColor.brown]
 
-    let htmlFormattedString = HTMLStringConverter.convert(testString, linkAttributes: linkTextAttributes, stringAttributes: textAttributes)
+    let htmlFormattedString = HTMLTextConverter.convert(testString, linkAttributes: linkTextAttributes, stringAttributes: textAttributes)
 
-#### Example using HTMLStringConverter with UITextView
+#### Example using HTMLTextConverter with UITextView
 
 UITextView has a property to detect links automatically. Therefore UITextViews can be useful in combination with this pod. The textView's property isEditable needs to be set to false for this to work.
 Also, UITextView provides a property linkTextAttributes to style the links in its attributedString. This will override the converted link styles. So when using UITextViews, either use this property to style the links or set the link attributes to [:]:
@@ -43,13 +43,13 @@ Also, UITextView provides a property linkTextAttributes to style the links in it
     textview.dataDetectorTypes
     textView.isEditable = false
 
-#### Example using HTMLStringConverter with UILabel
+#### Example using HTMLTextConverter with UILabel
 UILabel cannot automatically detect links, but can still be used to display html tagged formatted text with this converter. 
-Warning: Despite UILabel not being able to detect links automatically, links can still be displayed and formatted through linkAttributes when using the HTMLStringConverter. This can lead to a false UI when using UILabel instead of UITextView. (Example in Sample project)
+Warning: Despite UILabel not being able to detect links automatically, links can still be displayed and formatted through linkAttributes when using the HTMLTextConverter. This can lead to a false UI when using UILabel instead of UITextView. (Example in Sample project)
 
     label.attributedText = htmlFormattedString
 
-### Example using HTMLStringConverter with an HTML-Wrapper
+### Example using HTMLTextConverter with an HTML-Wrapper
 HTML-Custom-Wrapper.html:
     
     <!DOCTYPE html>

@@ -25,7 +25,7 @@
 
 @interface APLHrefStringConverter : NSObject
 
-+(NSMutableAttributedString*)convert:(NSString *)hrefString __deprecated_msg("This class is deprecated, use HTMLStringConverter instead");
++(NSMutableAttributedString*)convert:(NSString *)hrefString __deprecated_msg("This class is deprecated, use HTMLTextConverter instead");
 
 @end
 

@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "APLHrefStringConverter"
-  s.version      = "1.0.7"
+  s.version      = "1.0.8"
   s.summary      = "A simple converter taking a string containing html formatted tags and creating a formatted attributed text"
 
   s.description  = <<-DESC
